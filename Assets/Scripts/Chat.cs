@@ -278,6 +278,7 @@ public class Chat : MonoBehaviour
 			m_transport.Send(buffer, buffer.Length);
 
             // server: 0 , not server : 1
+            // 서버라면 내자신(0:왼쪽화면,1:오른쪽화면) 왼쪽에게 글을 올린다.
 			AddMessage(ref m_message[(m_isServer == true)? 0 : 1], message);
 			m_sendComment = "";
 		}
@@ -292,6 +293,8 @@ public class Chat : MonoBehaviour
 			DispBalloon(ref m_message[0], new Vector2(200.0f, 200.0f), new Vector2(340.0f, 360.0f), Color.cyan, true);
 			GUI.DrawTexture(new Rect(50.0f, 370.0f, 145.0f, 200.0f), this.texture_tofu);
 		}
+
+
         // 콩장수의(클라이언트 측) 메시지 표시. 
         if (m_transport.IsServer() == false || m_transport.IsServer() && m_transport.IsConnected()) {
 			
