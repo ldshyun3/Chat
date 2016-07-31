@@ -44,7 +44,7 @@ public class PacketQueue
 		m_streamBuffer.Write(data, 0, size); // 저장위치 설정된곳부터 사이즈까지
 		m_streamBuffer.Flush(); // 메모리스트림에 반영하기
 		m_offset += size; // 오프셋 사이즈만큼 증가.
-        Chat.instance.print("Enqueue() , m_offsetList.Add(info); , m_streamBuffer.Position = m_offset; , m_offset += size;");
+        Chat.instance.print("Enqueue()");
         return size;
 	}
 
@@ -71,7 +71,7 @@ public class PacketQueue
 		
 		// 큐 데이터를 가져왔으므로 선두 요소를 삭제.
 		if (recvSize > 0) {
-            Chat.instance.print("Dequeue() , if (recvSize > 0) ,m_offsetList.RemoveAt(0);");
+            Chat.instance.print("Dequeue() , m_offsetList.RemoveAt(0);");
             m_offsetList.RemoveAt(0);
 		}
 		
@@ -79,7 +79,7 @@ public class PacketQueue
 		if (m_offsetList.Count == 0) {
 			Clear();
 			m_offset = 0;
-            Chat.instance.print("Dequeue() , if (m_offsetList.Count == 0) , Clear(); , m_offset = 0;"); 
+            Chat.instance.print("Dequeue() , Clear(); , m_offset = 0;"); 
 		}
 		
 		return recvSize;

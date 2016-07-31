@@ -72,7 +72,7 @@ public class TransportTCP : MonoBehaviour {
     // 대기 시작.
     public bool StartServer(int port, int connectionNum)
 	{
-        Debug.Log("StartServer called.!");
+        //Debug.Log("StartServer called.!");
 
         // 리스닝 소켓을 생성합니다.
         try {
@@ -138,7 +138,7 @@ public class TransportTCP : MonoBehaviour {
     // 스레드 측 송수신 처리.
     public void Dispatch()
     {
-        Debug.Log("Dispatch thread started.");
+        //Debug.Log("Dispatch thread started.");
 
         while (m_threadLoop)
         {
@@ -323,7 +323,7 @@ public class TransportTCP : MonoBehaviour {
             Debug.Log("TransportTCP::Send(ref byte[] data, int size) , if (m_sendQueue == null) , return 0");
             return 0;
 		}
-        Debug.Log("TransportTCP::Send() -> m_sendQueue.Enqueue(data, size);");
+        //Debug.Log("TransportTCP::Send() -> m_sendQueue.Enqueue(data, size);");
         return m_sendQueue.Enqueue(data, size);
     }
 

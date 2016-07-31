@@ -108,7 +108,7 @@ public class Chat : MonoBehaviour
         {
             if (hostAddress.ToString().Contains("192") )
             {
-                Debug.Log(hostAddress.ToString());
+                //Debug.Log(hostAddress.ToString());
 
                 m_hostAddress = hostAddress.ToString();
                 break;
@@ -274,7 +274,7 @@ public class Chat : MonoBehaviour
 			string message = "[" + DateTime.Now.ToString("HH:mm:ss") + "] " + m_sendComment;
 			byte[] buffer = System.Text.Encoding.UTF8.GetBytes(message);
 
-            Debug.Log("Chat::ChattingGUI() , m_transport.Send(buffer, buffer.Length); ");            	
+            //Debug.Log("Chat::ChattingGUI() , m_transport.Send(buffer, buffer.Length); ");            	
 			m_transport.Send(buffer, buffer.Length);
 
             // server: 0 , not server : 1
@@ -284,20 +284,38 @@ public class Chat : MonoBehaviour
 		
 		if (GUI.Button (new Rect (700, 560, 80, 30), "나가기")) {
 			m_state = ChatState.LEAVE;
-		}	
+		}
 
+        
 		// 두부장수(서버 측)이 메시지 표시.
 		if (m_transport.IsServer() || m_transport.IsServer() == false && m_transport.IsConnected()) {
 			DispBalloon(ref m_message[0], new Vector2(200.0f, 200.0f), new Vector2(340.0f, 360.0f), Color.cyan, true);
 			GUI.DrawTexture(new Rect(50.0f, 370.0f, 145.0f, 200.0f), this.texture_tofu);
 		}
-
-		if (m_transport.IsServer() == false || m_transport.IsServer() && m_transport.IsConnected()) {
-			// 콩장수의(클라이언트 측) 메시지 표시. 
+        // 콩장수의(클라이언트 측) 메시지 표시. 
+        if (m_transport.IsServer() == false || m_transport.IsServer() && m_transport.IsConnected()) {
+			
 			DispBalloon(ref m_message[1], new Vector2(600.0f, 200.0f), new Vector2(340.0f, 360.0f), Color.green, false);
 			GUI.DrawTexture(new Rect(600.0f, 370.0f, 145.0f, 200.0f), this.texture_daizu);
 		}
-	}
+        
+        /*
+        // 두부장수(서버 측)이 메시지 표시.
+        if (m_transport.IsServer())
+        {
+            DispBalloon(ref m_message[0], new Vector2(200.0f, 200.0f), new Vector2(340.0f, 360.0f), Color.cyan, true);
+            GUI.DrawTexture(new Rect(50.0f, 370.0f, 145.0f, 200.0f), this.texture_tofu);
+        }
+
+        // 콩장수의(클라이언트 측) 메시지 표시. 
+        if (m_transport.IsServer() == false)
+        {
+            
+            DispBalloon(ref m_message[1], new Vector2(600.0f, 200.0f), new Vector2(340.0f, 360.0f), Color.green, false);
+            GUI.DrawTexture(new Rect(600.0f, 370.0f, 145.0f, 200.0f), this.texture_daizu);
+        }
+        */
+    }
 
 
     void UpdateLeave()
