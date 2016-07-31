@@ -249,6 +249,9 @@ public class Chat : MonoBehaviour
 
 			m_chatMessage += message + "   ";// + "\n";
 
+            // 서버라면.. 리시브는 클라이언트측에서 오기때문에 오른쪽채팅창에 표시해야한다. 그래서[1]
+            // 즉 , 유니티창 2개가 각각 오른쪽 채팅창에 입력된글이 올라온다.
+            // 클라이언트라면 창2개가 각각 왼쪽 채팅창에 입력된글이 올라온다.
             // server : 1 , not server : 0
 			int id = (m_isServer == true)? 1 : 0;
 			AddMessage(ref m_message[id], message);
