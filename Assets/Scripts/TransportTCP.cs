@@ -96,21 +96,7 @@ public class TransportTCP : MonoBehaviour {
     }
 
 
-    // 클라리언트 접속.
-    void AcceptClient()
-    {
-        if (m_listener != null && m_listener.Poll(0, SelectMode.SelectRead))
-        {
-            // 클라이언트가 접속했습니다.
-            m_socket = m_listener.Accept();
-            m_isConnected = true;
-            NetEventState state = new NetEventState();
-            state.type = NetEventType.Connect;
-            state.result = NetEventResult.Success;
-            m_handler(state);
-            Debug.Log("Connected from client.");
-        }
-    }
+
 
 
     // 스레드 시작 함수.
@@ -133,7 +119,21 @@ public class TransportTCP : MonoBehaviour {
     }
 
 
-
+    // 클라리언트 접속.
+    void AcceptClient()
+    {
+        if (m_listener != null && m_listener.Poll(0, SelectMode.SelectRead))
+        {
+            // 클라이언트가 접속했습니다.
+            m_socket = m_listener.Accept();
+            m_isConnected = true;
+            NetEventState state = new NetEventState();
+            state.type = NetEventType.Connect;
+            state.result = NetEventResult.Success;
+            m_handler(state);
+            Debug.Log("Connected from client.");
+        }
+    }
 
     // 스레드 측 송수신 처리.
     public void Dispatch()
@@ -172,6 +172,7 @@ public class TransportTCP : MonoBehaviour {
             // 송신처리.
             if (m_socket.Poll(0, SelectMode.SelectWrite))
             {
+
                 byte[] buffer = new byte[s_mtu]; // s_mtu = 1400;
 
                 // 첫타로 송신할 데이터가있는지 해보고
@@ -202,10 +203,10 @@ public class TransportTCP : MonoBehaviour {
         {
             while (m_socket.Poll(0, SelectMode.SelectRead))
             {
+                //Debug.Log("~~~~~~~~~~~");
                 byte[] buffer = new byte[s_mtu]; // s_mtu = 1400;
 
                 // Receive에서 buffer의 할당된 크기까지 데이터를 받아올수있다.
-                //Debug.Log("TransportTCP::DispatchReceive() -> int recvSize = m_socket.Receive(buffer, buffer.Length, SocketFlags.None);");
                 int recvSize = m_socket.Receive(buffer, buffer.Length, SocketFlags.None);
 
                 if (recvSize == 0)
@@ -233,26 +234,7 @@ public class TransportTCP : MonoBehaviour {
 
 
 
-    // 대기 종료.
-    public void StopServer()
-    {
-		m_threadLoop = false;
-        if (m_thread != null) {
-            m_thread.Join();
-            m_thread = null;
-        }
 
-        Disconnect();
-
-        if (m_listener != null) {
-            m_listener.Close();
-            m_listener = null;
-        }
-
-        m_isServer = false;
-
-        Debug.Log("Server stopped.");
-    }
 
 
     // 접속.
@@ -278,8 +260,7 @@ public class TransportTCP : MonoBehaviour {
 		if (ret == true) {
 			m_isConnected = true;
 			Debug.Log("Connection success.");
-		}
-		else {
+		} else {
 			m_isConnected = false;
 			Debug.Log("Connect fail");
 		}
@@ -356,6 +337,9 @@ public class TransportTCP : MonoBehaviour {
     }
 
 
+
+
+
     // 서버인지 확인.
     public bool IsServer() {
 		return m_isServer;
@@ -364,6 +348,31 @@ public class TransportTCP : MonoBehaviour {
     // 접속 확인.
     public bool IsConnected() {
         return m_isConnected;
+    }
+
+
+
+    // 대기 종료.
+    public void StopServer()
+    {
+        m_threadLoop = false;
+        if (m_thread != null)
+        {
+            m_thread.Join();
+            m_thread = null;
+        }
+
+        Disconnect();
+
+        if (m_listener != null)
+        {
+            m_listener.Close();
+            m_listener = null;
+        }
+
+        m_isServer = false;
+
+        Debug.Log("Server stopped.");
     }
 
 }
