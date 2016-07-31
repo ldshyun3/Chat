@@ -44,12 +44,19 @@ public class Chat : MonoBehaviour
 	private static int		MESSAGE_LINE = 18;
 	private static int		CHAT_MEMBER_NUM = 2;
 
+    public static Chat instance;
+
 	enum ChatState {
 		HOST_TYPE_SELECT = 0,	// 방 선택.
 		CHATTING,				// 채팅 중.
 		LEAVE,					// 나가기.
 		ERROR,					// 오류.
 	};
+
+    public void print(string str)
+    {
+        Debug.Log("Chat::print() str: " + str);
+    }
 
     void OnApplicationQuit()
     {
@@ -90,6 +97,8 @@ public class Chat : MonoBehaviour
     // Use this for initialization
     void Start()
 	{
+        instance = this;
+
 		IPHostEntry hostEntry = Dns.GetHostEntry(Dns.GetHostName());
         //System.Net.IPAddress hostAddress = hostEntry.AddressList[0];
 

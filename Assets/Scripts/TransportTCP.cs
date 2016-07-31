@@ -172,12 +172,18 @@ public class TransportTCP : MonoBehaviour {
             // 송신처리.
             if (m_socket.Poll(0, SelectMode.SelectWrite))
             {
-                byte[] buffer = new byte[s_mtu];
+                byte[] buffer = new byte[s_mtu]; // s_mtu = 1400;
 
+                // 첫타로 송신할 데이터가있는지 해보고
                 int sendSize = m_sendQueue.Dequeue(ref buffer, buffer.Length);
+
+                // 있다면 , 루프로 데이터가 없을때까지 디큐함.
                 while (sendSize > 0)
                 {
+                    Debug.Log("TransportTCP::DispatchReceive() ->  m_socket.Send(buffer, sendSize, SocketFlags.None);");
                     m_socket.Send(buffer, sendSize, SocketFlags.None);
+
+                    Debug.Log("TransportTCP::DispatchReceive() ->  sendSize = m_sendQueue.Dequeue(ref buffer, buffer.Length);");
                     sendSize = m_sendQueue.Dequeue(ref buffer, buffer.Length);
                 }
             }
@@ -196,19 +202,21 @@ public class TransportTCP : MonoBehaviour {
         {
             while (m_socket.Poll(0, SelectMode.SelectRead))
             {
-                byte[] buffer = new byte[s_mtu];
+                byte[] buffer = new byte[s_mtu]; // s_mtu = 1400;
 
                 // Receive에서 buffer의 할당된 크기까지 데이터를 받아올수있다.
+                //Debug.Log("TransportTCP::DispatchReceive() -> int recvSize = m_socket.Receive(buffer, buffer.Length, SocketFlags.None);");
                 int recvSize = m_socket.Receive(buffer, buffer.Length, SocketFlags.None);
 
                 if (recvSize == 0)
                 {
                     // 끊기.
-                    Debug.Log("Disconnect recv from client.");
+                    Debug.Log("TransportTCP::DispatchReceive() -> if (recvSize == 0) , Disconnect();");
                     Disconnect();
                 }
                 else if (recvSize > 0)
                 {
+                    Debug.Log("TransportTCP::DispatchReceive() ->  if (recvSize > 0) , Enqueue(buffer, recvSize);");
                     m_recvQueue.Enqueue(buffer, recvSize);
                 }
             }
@@ -315,7 +323,7 @@ public class TransportTCP : MonoBehaviour {
             Debug.Log("TransportTCP::Send(ref byte[] data, int size) , if (m_sendQueue == null) , return 0");
             return 0;
 		}
-
+        Debug.Log("TransportTCP::Send() -> m_sendQueue.Enqueue(data, size);");
         return m_sendQueue.Enqueue(data, size);
     }
 
