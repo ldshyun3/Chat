@@ -40,10 +40,10 @@ public class PacketQueue
 		m_offsetList.Add(info);
 		
 		// 패킷 데이터를 보존.
-		m_streamBuffer.Position = m_offset;
-		m_streamBuffer.Write(data, 0, size);
-		m_streamBuffer.Flush();
-		m_offset += size;
+		m_streamBuffer.Position = m_offset; // 오프셋 저장위치 설정
+		m_streamBuffer.Write(data, 0, size); // 저장위치 설정된곳부터 사이즈까지
+		m_streamBuffer.Flush(); // 메모리스트림에 반영하기
+		m_offset += size; // 오프셋 사이즈만큼 증가.
 		
 		return size;
 	}
