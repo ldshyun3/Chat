@@ -47,8 +47,9 @@ public class PacketQueue
 		
 		return size;
 	}
-	
-	public int Dequeue(ref byte[] buffer, int size) {
+
+    // byte[] buffer = new byte[1400];
+    public int Dequeue(ref byte[] buffer, int size) {
          
 
         if (m_offsetList.Count <= 0) {
@@ -65,7 +66,7 @@ public class PacketQueue
         // 가져오려는 오프셋위치 설정
         m_streamBuffer.Position = info.offset;
         
-        // 버퍼에 오프셋위치부터 데이터사이즈까지 데이터를 담는다. 
+        // 버퍼의 포지션에서 오프셋위치부터 데이터사이즈까지 데이터를 담는다. 
 		int recvSize = m_streamBuffer.Read(buffer, 0, dataSize);
 		
 		// 큐 데이터를 가져왔으므로 선두 요소를 삭제.

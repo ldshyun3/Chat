@@ -91,11 +91,21 @@ public class Chat : MonoBehaviour
     void Start()
 	{
 		IPHostEntry hostEntry = Dns.GetHostEntry(Dns.GetHostName());
-		System.Net.IPAddress hostAddress = hostEntry.AddressList[0];
-		Debug.Log(hostEntry.HostName);
+        //System.Net.IPAddress hostAddress = hostEntry.AddressList[0];
 
-		m_hostAddress = hostAddress.ToString ();
+        IPAddress[] Address = hostEntry.AddressList;
 
+        foreach(IPAddress hostAddress in Address)
+        {
+            if (hostAddress.ToString().Contains("192") )
+            {
+                Debug.Log(hostAddress.ToString());
+
+                m_hostAddress = hostAddress.ToString();
+                break;
+            }
+        }
+        
 		GameObject go = new GameObject("Network");
 		m_transport = go.AddComponent<TransportTCP>();
 
@@ -268,14 +278,12 @@ public class Chat : MonoBehaviour
 		}	
 
 		// 두부장수(서버 측)이 메시지 표시.
-		if (m_transport.IsServer() ||
-			m_transport.IsServer() == false && m_transport.IsConnected()) {
+		if (m_transport.IsServer() || m_transport.IsServer() == false && m_transport.IsConnected()) {
 			DispBalloon(ref m_message[0], new Vector2(200.0f, 200.0f), new Vector2(340.0f, 360.0f), Color.cyan, true);
 			GUI.DrawTexture(new Rect(50.0f, 370.0f, 145.0f, 200.0f), this.texture_tofu);
 		}
 
-		if (m_transport.IsServer() == false ||
-			m_transport.IsServer() && m_transport.IsConnected()) {
+		if (m_transport.IsServer() == false || m_transport.IsServer() && m_transport.IsConnected()) {
 			// 콩장수의(클라이언트 측) 메시지 표시. 
 			DispBalloon(ref m_message[1], new Vector2(600.0f, 200.0f), new Vector2(340.0f, 360.0f), Color.green, false);
 			GUI.DrawTexture(new Rect(600.0f, 370.0f, 145.0f, 200.0f), this.texture_daizu);

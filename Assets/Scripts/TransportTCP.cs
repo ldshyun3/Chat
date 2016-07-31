@@ -326,14 +326,14 @@ public class TransportTCP : MonoBehaviour {
             Debug.Log("TransportTCP::Receive(ref byte[] buffer, int size) , if (m_recvQueue == null) , return 0");
             return 0;
 		}
-
+        // byte[] buffer = new byte[1400];
         return m_recvQueue.Dequeue(ref buffer, size);
     }
 
 
 
 
-
+    
 
     // 이벤트 통지 함수 등록.
     public void RegisterEventHandler(EventHandler handler)
