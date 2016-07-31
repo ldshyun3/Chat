@@ -61,7 +61,11 @@ public class PacketQueue
 	
 		// 버퍼에서 해당하는 패킷 데이터를 가져옵니다.
 		int dataSize = Math.Min(size, info.size);
-		m_streamBuffer.Position = info.offset;
+
+        // 가져오려는 오프셋위치 설정
+        m_streamBuffer.Position = info.offset;
+        
+        // 버퍼에 오프셋위치부터 데이터사이즈까지 데이터를 담는다. 
 		int recvSize = m_streamBuffer.Read(buffer, 0, dataSize);
 		
 		// 큐 데이터를 가져왔으므로 선두 요소를 삭제.
@@ -80,10 +84,16 @@ public class PacketQueue
 	
 	public void Clear()
 	{
+        // 메모리스트림의 메모리주소값들을 가져오는듯하다.
 		byte[] buffer = m_streamBuffer.GetBuffer();
+
+        // 메모리위치들을 0으로 초기화시킨다.
 		Array.Clear(buffer, 0, buffer.Length);
 		
+        //오프셋 포지션을 0으로 초기화
 		m_streamBuffer.Position = 0;
+
+        // 메모리스트림의 길이를 0으로 설정
 		m_streamBuffer.SetLength(0);
 	}
 }
