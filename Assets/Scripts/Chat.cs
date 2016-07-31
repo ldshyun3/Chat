@@ -237,7 +237,11 @@ public class Chat : MonoBehaviour
 	{
 		byte[] buffer = new byte[1400];
 
-		int recvSize = m_transport.Receive(ref buffer, buffer.Length);
+        // [0]요소는 제일 오래됀 데이터. 마지막요소는 가장최근 데이터
+        // 버퍼를 참조로 넘겨서 Dequeue에서 메모리스트림에 접근하여 포지션 오프셋기반으로 [0]요소 데이터를 뽑음. m_offsetList.RemoveAt(0);
+        // 결론적으로 UpdateChatting()는 무한호출이기때문에  
+        // 메모리스트림의 모든데이터를 호출때마다 하나씩 추출하여 결국 다뽑는다.
+        int recvSize = m_transport.Receive(ref buffer, buffer.Length);
 
 		if (recvSize > 0) {
 			string message = System.Text.Encoding.UTF8.GetString(buffer);
@@ -274,8 +278,9 @@ public class Chat : MonoBehaviour
 			string message = "[" + DateTime.Now.ToString("HH:mm:ss") + "] " + m_sendComment;
 			byte[] buffer = System.Text.Encoding.UTF8.GetBytes(message);
 
-            //Debug.Log("Chat::ChattingGUI() , m_transport.Send(buffer, buffer.Length); ");            	
-			m_transport.Send(buffer, buffer.Length);
+            //Debug.Log("Chat::ChattingGUI() , m_transport.Send(buffer, buffer.Length); ");    
+            // m_sendQueue.Enqueue(data, size); 로 쌓임.        	
+            m_transport.Send(buffer, buffer.Length);
 
             // server: 0 , not server : 1
             // 서버라면 내자신(0:왼쪽화면,1:오른쪽화면) 왼쪽에게 글을 올린다.
