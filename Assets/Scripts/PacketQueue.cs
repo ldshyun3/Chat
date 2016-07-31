@@ -56,6 +56,7 @@ public class PacketQueue
             return -1;
 		}
 		
+        // 0은 초기값 , 마지막은 최시값 , 그래서 항상 0부터 값을 뽑음
 		PacketInfo info = m_offsetList[0];
 	
 		// 버퍼에서 해당하는 패킷 데이터를 가져옵니다.
