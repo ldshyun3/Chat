@@ -277,25 +277,7 @@ public class TransportTCP : MonoBehaviour {
         return m_isConnected;
     }
 
-	// 끊기. 
-    public void Disconnect() {
-        m_isConnected = false;
 
-        if (m_socket != null) {
-            // 소켓 클로즈.
-            m_socket.Shutdown(SocketShutdown.Both);
-            m_socket.Close();
-            m_socket = null;
-        }
-
-        // 끊김을 통지합니다.
-        if (m_handler != null) {
-			NetEventState state = new NetEventState();
-			state.type = NetEventType.Disconnect;
-			state.result = NetEventResult.Success;
-			m_handler(state);
-        }
-    }
 
     // 송신처리.
     public int Send(byte[] data, int size)
@@ -350,7 +332,28 @@ public class TransportTCP : MonoBehaviour {
         return m_isConnected;
     }
 
+    // 끊기. 
+    public void Disconnect()
+    {
+        m_isConnected = false;
 
+        if (m_socket != null)
+        {
+            // 소켓 클로즈.
+            m_socket.Shutdown(SocketShutdown.Both);
+            m_socket.Close();
+            m_socket = null;
+        }
+
+        // 끊김을 통지합니다.
+        if (m_handler != null)
+        {
+            NetEventState state = new NetEventState();
+            state.type = NetEventType.Disconnect;
+            state.result = NetEventResult.Success;
+            m_handler(state);
+        }
+    }
 
     // 대기 종료.
     public void StopServer()
